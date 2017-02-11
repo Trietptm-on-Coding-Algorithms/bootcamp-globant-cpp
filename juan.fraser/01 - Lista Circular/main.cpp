@@ -17,7 +17,7 @@ public:
 	ListElement* pushFront(int elemVal);
 	ListElement* pushBack(int elemVal);
 
-	//ListElement* insertNextTo(ListElement* element, int elemVal);
+	ListElement* insertNextTo(ListElement* element, int elemVal);
 	void erase(ListElement* element);
 
 	void clear();
@@ -81,23 +81,27 @@ ListElement* CircularList::pushBack(int elemVal) {
 	}
 	return newNode;
 }
-/*ListElement* CircularList::insertNextTo(ListElement* element, int elemVal) {
-if (element == root)
-return pushFront(elemVal);
-if (root == nullptr)
-return nullptr;
-if (element == tail)
-return pushBack(elemVal);
-// Search for element. If found, add. If not, do nothing.
-ListElement* itr = root;
-while (itr != tail) {
-itr = itr->next;
-if (itr == element) {
-
+ListElement* CircularList::insertNextTo(ListElement* element, int elemVal) {
+	ListElement* newNode = nullptr;
+	if (root == nullptr && element == nullptr)
+		newNode = pushFront(elemVal);
+	else if (root != nullptr && element != nullptr) {
+		ListElement* itr = root;
+		do {
+			if (itr == element) {
+				newNode = new ListElement();
+				newNode->val = elemVal;
+				newNode->next = itr->next;
+				itr->next = newNode;
+				if (element == tail)
+					tail = newNode;
+				break;
+			}
+			itr = itr->next;
+		} while (itr != root);
+	}
+	return newNode;
 }
-}
-return NULL;
-}*/
 
 //  Removers  //
 
@@ -238,10 +242,37 @@ void testPushFront() {
 	assert(list.getLast()->val == 1);
 }
 
+void testInsertNextTo() {
+	CircularList list;
+	ListElement* one = list.insertNextTo(nullptr,1);
+	assert(list.getFirst() == one);
+	assert(list.getLast() == one);
+	ListElement* two = list.insertNextTo(one, 2);
+	assert(list.getLast() == two);
+	ListElement* three = list.insertNextTo(one, 3);
+	assert(list.getLast() == two);
+	ListElement* four = list.insertNextTo(one, 4);
+	assert(list.getLast() == two);
+	assert(list.getElementCount() == 4);
+	list.erase(four);
+	assert(list.getElementCount() == 3);
+	ListElement* five = list.insertNextTo(four, 5);
+	assert(list.getElementCount() == 3);
+	assert(five == nullptr);
+	list.erase(one);
+	assert(list.getFirst() == three);
+	list.erase(three);
+	assert(list.getFirst() == two);
+	list.erase(two);
+	assert(list.getElementCount() == 0);
+
+}
+
 int main() {
 	testPushBack();
 	testErase();
 	testPushFront();
+	testInsertNextTo();
 
 	return 0;
 }
