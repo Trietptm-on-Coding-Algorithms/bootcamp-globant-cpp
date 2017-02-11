@@ -56,29 +56,29 @@ ListElement* CircularList::buildNode(int elemVal, ListElement* next) {
 }
 
 ListElement* CircularList::pushFront(int elemVal) {
+	ListElement* newNode;
 	if (root == nullptr) {
-		root = buildNode(elemVal, nullptr);
-		tail = root;
-		return root;
+		newNode = buildNode(elemVal, nullptr);
+		root = newNode;
+		tail = newNode;
+	} else {
+		newNode = buildNode(elemVal, root);
+		tail->next = newNode;
+		root = newNode;
 	}
-
-	ListElement* newNode = buildNode(elemVal, root);
-	tail->next = newNode;
-	root = newNode;
-
-	return newNode;	
+	return newNode;
 }
 ListElement* CircularList::pushBack(int elemVal) {
+	ListElement* newNode;
 	if (root == nullptr) {
-		root = buildNode(elemVal, nullptr);
-		tail = root;
-		return root;
+		newNode = buildNode(elemVal, nullptr);
+		root = newNode;
+		tail = newNode;
+	} else {
+		newNode = buildNode(elemVal, root);
+		tail->next = newNode;
+		tail = newNode;
 	}
-
-	ListElement* newNode = buildNode(elemVal, root);
-	tail->next = newNode;
-	tail = newNode;
-
 	return newNode;
 }
 /*ListElement* CircularList::insertNextTo(ListElement* element, int elemVal) {
@@ -102,34 +102,31 @@ return NULL;
 //  Removers  //
 
 void CircularList::erase(ListElement* element) {
-	if (root == nullptr)
-		return;
-	if (root == tail) {
-		if (root == element) {
-			delete root;
-			root = nullptr;
-			tail = nullptr;
+	if (root != nullptr) {
+		if (root == tail) {		// solo hay un elemento en la lista
+			if (root == element) {
+				delete root;
+				root = nullptr;
+				tail = nullptr;
+			}
+		} else {				// hay más de un elemento en la lista
+			ListElement* itr = root;
+			ListElement* prev = tail;
+			do {
+				if (itr == element) {
+					prev->next = itr->next;
+					if (itr == root)
+						root = itr->next;
+					if (itr == tail)
+						tail = prev;
+					delete itr;
+					break;
+				}
+				prev = itr;
+				itr = itr->next;
+			} while (itr != root);
 		}
-		return;
 	}
-
-	ListElement* itr = root;
-	ListElement* prev = tail;
-	do {
-		if (itr == element) {
-			prev->next = itr->next;
-			if (itr == root)
-				root = itr->next;
-			if (itr == tail)
-				tail = prev;
-			delete itr;
-			return;
-		}
-		prev = itr;
-		itr = itr->next;
-	} while (itr != root);
-
-	return;
 }
 void CircularList::clear() {
 	if (root != nullptr) {
@@ -143,7 +140,6 @@ void CircularList::clear() {
 		root = nullptr;
 		tail = nullptr;
 	}
-	return;
 }
 
 //  Getters  //
