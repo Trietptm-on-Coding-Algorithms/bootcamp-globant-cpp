@@ -1,8 +1,6 @@
 #include <iostream>
 #include <assert.h>
 
-using namespace std;
-
 struct ListElement {
     int val;
     ListElement* next;
