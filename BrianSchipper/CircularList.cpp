@@ -286,8 +286,7 @@ void testPushFront() {
 }
 
 int main() {
-	CircularList list;
-	list.clear();
+	
 /*
 	testPushBack();
 
