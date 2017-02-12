@@ -51,11 +51,9 @@ ListElement*CircularList::pushFront(int elemVal)
 	if (first == NULL)
 	{
 		// En caso de lista vacia, last = first= newElement y los punteros van a si mismo
-		newElement-> next = newElement;
 		last =newElement;
 		first = newElement;
-		last->next = newElement;
-		first-> next = newElement;
+		newElement-> next = newElement;
 	}
 	else
 	{
@@ -75,11 +73,9 @@ ListElement*CircularList::pushBack(int elemVal)
 
 	if (first == NULL)
 	{
+		first= newElement;
+		last = newElement;
 		newElement->next = newElement;
-		first ->next =newElement;
-		first = newElement;
-		last ->next= newElement;
-		last=newElement;
 	}
 	else if (first != NULL)
 	{
