@@ -89,21 +89,16 @@ ListElement*CircularList::pushBack(int elemVal)
 void CircularList::erase(ListElement* element)
 {
 	// Busca el elemento mencionado y lo borra 
-	if (first == NULL)
-	{
-		// mandar mje no hay elementos
-	}
-	
-	else if ((first == last) && (element == first)) 
+	ListElement*aux=new ListElement();
+	if ((first == last) && (element == first)) 
 	{
 		// caso de unico elemento
-		delete element;
+		ListElement*aux= first;
+		delete aux;
 		last = NULL;
 		first = NULL;
 	}
 	else{
-		ListElement* ant = last;
-		ListElement*aux = new ListElement();
 		do {
 			if (aux == element) 
 				{
@@ -122,14 +117,12 @@ void CircularList::erase(ListElement* element)
 }
 void CircularList::clear ()
 {
-	if (first == NULL)
-	{ 
-	// no hay nada
-	}
-	else 
+	
+	if (first != NULL) 
 	do
 	{ 
-		delete first;
+		ListElement*toDelete =first;
+		delete toDelete;
 		first = first->next;
 	}	while (first != NULL);
 	last = NULL;
@@ -293,12 +286,15 @@ void testPushFront() {
 }
 
 int main() {
+	CircularList list;
+	list.clear();
+/*
 	testPushBack();
 
 	testErase();
 
 	testPushFront();
-
+*/
 	return 0;
 }
 
