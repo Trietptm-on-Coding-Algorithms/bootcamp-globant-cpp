@@ -32,8 +32,8 @@ private:
 CircularList::CircularList()
 {
 	// Constructor, inicializo con todos los punteros a NULL
-	this->	first =NULL;
-	this-> last = NULL;
+	first =NULL;
+	last = NULL;
 };
 
 CircularList::~CircularList()
