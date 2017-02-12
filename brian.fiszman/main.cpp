@@ -12,17 +12,40 @@ class CircularList {
 public:
     CircularList()
     {
-        this->first = NULL;
-        this->last  = NULL;
+        this->first = nullptr;
+        this->last  = nullptr;
     }
 
-    //    ~CircularList();
+    ~CircularList()
+    {
+        clear();
+    }
 
     ListElement* pushFront(int elemVal)
     {
         ListElement *le = new ListElement();
         le->val = elemVal;
-        
+
+        if (this->isEmpty())
+        {
+            this->first = this->last = le;
+            this->last->next = this->first;
+        }
+        else
+        {
+            ListElement *aux = this->getFirst();
+            this->first = le;
+            this->first->next = aux;
+            this->last->next = this->getFirst();
+        }
+        return le;
+    }
+
+    ListElement* pushBack(int elemVal)
+    {
+        ListElement *le = new ListElement();
+        le->val = elemVal;
+
         if (this->isEmpty())
         {
             this->first = this->last = le;
@@ -37,60 +60,65 @@ public:
         return le;
     }
 
-    ListElement* pushBack(int elemVal)
-    {
-        ListElement *le = new ListElement();
-        ListElement *aux = this->getFirst();
-        le->val = elemVal;
-
-        if (this->isEmpty())
-        {
-            this->first = this->last = le;
-            this->last->next = this->first;
-        }
-        else
-        {
-            this->first = le;
-            this->first->next = aux;
-            this->last->next = this->getFirst();
-        }
-        return le;
-    }
-
     void insertNextTo(ListElement* element, int elemVal);
     void erase(ListElement* element)
     {
-        ListElement *aux = this->getFirst();
-        if (this->getFirst() == element)
+        if (!this->isEmpty() || element != nullptr)
         {
-            this->first = this->first->next;
-            this->last->next = this->first;
-            delete element;
-        }
-        else
-        {
-            for(size_t i = 0; i <= this->getElementCount(); i++)
+            ListElement *aux = this->getFirst();
+            if ((this->getFirst() == element) && (this->getFirst() != this->getLast()))
             {
-                if (aux->next == element)
+                this->first = this->first->next;
+                this->last->next = this->first;
+                delete element;
+            }
+            else if ((this->getFirst() == this->getLast()) && (this->getFirst() == element))
+            {
+                delete this->first;
+                this->first = nullptr;
+                this->last = nullptr;
+            }
+            else
+            {
+                for(size_t i = 0; i <= this->getElementCount(); i++)
                 {
-                    if (this->getLast() == element)
+                    if (aux->next == element)
                     {
-                        this->last = aux;
-                        this->last->next = this->getFirst();
+                        if (this->getLast() == element)
+                        {
+                            this->last = aux;
+                            this->last->next = this->getFirst();
+                        }
+                        else
+                        {
+                            aux->next = aux->next->next;
+                        }
+                        delete element;
+                        break;
                     }
-                    else
-                    {
-                        aux->next = aux->next->next;
-                    }
-                    delete element;
-                    break;
+                    aux = aux->next;
                 }
-                aux = aux->next;
             }
         }
     }
 
-    void clear();
+    void clear()
+    {
+        for(size_t i = 0; i <= this->getElementCount(); i++)
+        {
+            if(this->first != nullptr)
+            {
+                ListElement *aux = this->getFirst();
+                do {
+                    ListElement *tmp = aux->next;
+                    delete aux;
+                    aux = tmp;
+                } while (aux != this->getFirst());
+                this->first = nullptr;
+                this->last  = nullptr;
+            }
+        }
+    }
 
     ListElement* getFirst(){ return this->first; }
     ListElement* getLast() { return this->last;  }
@@ -98,7 +126,7 @@ public:
     size_t getElementCount()
     {
         if (this->isEmpty())
-            return 0;            
+            return 0;
 
         size_t elementCount = 0;
         ListElement* aux = this->getFirst();
@@ -114,7 +142,7 @@ private:
 
     bool isEmpty()
     {
-        return (this->first == NULL);
+        return (this->first == nullptr);
     }
 };
 
