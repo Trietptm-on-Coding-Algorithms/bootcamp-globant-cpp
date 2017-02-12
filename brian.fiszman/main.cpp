@@ -97,6 +97,9 @@ public:
 
     size_t getElementCount()
     {
+        if (this->isEmpty())
+            return 0;            
+
         size_t elementCount = 0;
         ListElement* aux = this->getFirst();
         do {
