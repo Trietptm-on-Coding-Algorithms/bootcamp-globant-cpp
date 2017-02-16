@@ -18,9 +18,9 @@ int main() {
 
 	sf::CircleShape ball(10.f);
 	//ball.setPointCount(8);
-	float vx=0, vy=0, ax=0, ay=9.8f;
-	float dv=0.1f, da=0.1f;
-	float sd = 0.001;
+	double vx=0, vy=0, ax=0, ay=9.8;
+	double dv=0.1, da=0.1;
+	double sd = 0.001;
 
 	sf::Event event;
 	bool justLostFocus = true;
@@ -69,7 +69,7 @@ int main() {
 			vy = -vy;
 		
 		//Object Update
-		ball.move(vx*dv, vy*dv);
+		ball.move((float)vx*dv, (float)vy*dv);
 		
 		//Renders
 		window.clear();
