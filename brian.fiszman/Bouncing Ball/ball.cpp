@@ -1,10 +1,9 @@
 #include <SFML/Graphics.hpp>
 
-
 using namespace sf;
 
 #define NORMAL_SPEED    0.1f
-#define FAST_SPEED      1.f
+#define MOVEMENT_SPEED  2.f
 #define ACCELERATION    NORMAL_SPEED/1
 #define GRAVITY         ACCELERATION*9.81
 #define SLOWDOWN        0.005
@@ -36,10 +35,10 @@ int main()
         speedY += GRAVITY;
         speedY -= SLOWDOWN*speedY;
         speedX -= SLOWDOWN*speedX;
-        if(Keyboard::isKeyPressed(UP))      speedY -= FAST_SPEED; 
-        if(Keyboard::isKeyPressed(DOWN))    speedY += FAST_SPEED; 
-        if(Keyboard::isKeyPressed(RIGHT))   speedX += FAST_SPEED; 
-        if(Keyboard::isKeyPressed(LEFT))    speedX -= FAST_SPEED; 
+        if(Keyboard::isKeyPressed(UP))      speedY -= MOVEMENT_SPEED; 
+        if(Keyboard::isKeyPressed(DOWN))    speedY += MOVEMENT_SPEED; 
+        if(Keyboard::isKeyPressed(RIGHT))   speedX += MOVEMENT_SPEED; 
+        if(Keyboard::isKeyPressed(LEFT))    speedX -= MOVEMENT_SPEED; 
         
         speedX = ((shape.getGlobalBounds().left < 0 && speedX < 0) ||
                 (shape.getGlobalBounds().left+shape.getGlobalBounds().width > resolutionX && speedX > 0)) ?
