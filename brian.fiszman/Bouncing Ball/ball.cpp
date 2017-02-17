@@ -8,8 +8,8 @@ using namespace sf;
 #define GRAVITY         ACCELERATION*9.81
 #define SLOWDOWN        0.005
 
-#define BPOS            ball.getGlobalBounds()
-#define RPOS            rectangle.getGlobalBounds()
+#define B_POS            ball.getGlobalBounds()
+#define R_POS            rectangle.getGlobalBounds()
 
 #define UP              Keyboard::Up
 #define DOWN            Keyboard::Down
@@ -27,6 +27,7 @@ int main()
     CircleShape ball(10.f);
     RectangleShape rectangle(Vector2f(120, 5)); 
     rectangle.setPosition(resX/2, resY/2);
+    rectangle.setOrigin(rectangle.getSize().x/2, rectangle.getSize().y/2);
     ball.setFillColor(Color::Blue);
     while (window.isOpen())
     {
@@ -46,9 +47,10 @@ int main()
         if(Keyboard::isKeyPressed(RIGHT))   speedX += MOVEMENT_SPEED; 
         if(Keyboard::isKeyPressed(LEFT))    speedX -= MOVEMENT_SPEED; 
         
-        speedX = ((BPOS.left < 0 && speedX < 0) || (BPOS.left+BPOS.width > resX && speedX > 0)) ?
+        speedX = ((B_POS.left < 0 && speedX < 0) || (B_POS.left+B_POS.width > resX && speedX > 0)) ?
             -speedX : speedX;
-        speedY = ((BPOS.top < 0 && speedY < 0) || (BPOS.top+BPOS.height > resY && speedY > 0)) ?
+        speedY = ((B_POS.top < 0 && speedY < 0) || (B_POS.top+B_POS.height > resY && speedY > 0) ||
+                (B_POS.intersects(R_POS))) ?
             -speedY : speedY;
         
         ball.move(speedX*IDLE_SPEED, speedY*IDLE_SPEED);
