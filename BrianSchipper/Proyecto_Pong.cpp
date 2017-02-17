@@ -20,6 +20,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(MaxScreenX,MaxScreenY), "Proyecto_pong");
 
 	//Set the derired FPS to 60
+
 	const unsigned int FPS = 60;
 	window.setFramerateLimit(FPS);
 
@@ -68,7 +69,12 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			speedY += 1.f;
 		
-		// Screen Limits
+		// Screen Limits and collision
+		if (circle.getGlobalBounds().intersects(rectangle.getGlobalBounds()))
+		{
+			//speedX = -2*speedX;
+			speedY = -speedY;
+		}
 
 		if (circle.getGlobalBounds().left < 0 && speedX < 0)
 		{
