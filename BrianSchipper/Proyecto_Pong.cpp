@@ -17,7 +17,7 @@ int main()
 {
 
 	//Creates the window
-	sf::RenderWindow window(sf::VideoMode(MaxScreenX,MaxScreenY), "Jueguito para Miri");
+	sf::RenderWindow window(sf::VideoMode(MaxScreenX,MaxScreenY), "Proyecto_pong");
 
 	//Set the derired FPS to 60
 	const unsigned int FPS = 60;
@@ -25,10 +25,10 @@ int main()
 
 	//Create a circle with radius 10
 	sf::CircleShape circle(radio,i);
-	sf::RectangleShape rectangle(sf::Vector2f(15.0f, 50.0f));
+	sf::RectangleShape rectangle(sf::Vector2f(80.0f, 15.0f));
 
 	circle.setPosition(200.0f, 200.0f);
-	rectangle.setPosition(145.0f, 145.0f);
+	rectangle.setPosition(0.0f, 385.0f);
 	rectangle.setFillColor(sf::Color(255,0,0,255));
 	circle.setFillColor(sf::Color(colorA, colorB, colorC, colorD));
 	sf::Event event;
@@ -49,6 +49,12 @@ int main()
 		//Handle Keyboard events;
 
 		circle.move((float)speedX*dx, (float)speedY*dy);
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			rectangle.move(-2.5f, 0.0f);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			rectangle.move(2.5f, 0.0f);
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 			speedX -= 1.f;
