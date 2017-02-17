@@ -4,11 +4,10 @@
 using namespace sf;
 
 #define NORMAL_SPEED    0.1f
-#define FAST_SPEED      0.25f
+#define FAST_SPEED      1.f
 #define ACCELERATION    NORMAL_SPEED/1
 #define GRAVITY         ACCELERATION*9.81
-#define SLOWDOWN        0.001
-
+#define SLOWDOWN        0.005
 
 #define UP      Keyboard::Up
 #define DOWN    Keyboard::Down
@@ -37,10 +36,10 @@ int main()
         speedY += GRAVITY;
         speedY -= SLOWDOWN*speedY;
         speedX -= SLOWDOWN*speedX;
-        if(Keyboard::isKeyPressed(UP))      speedY -= NORMAL_SPEED;
-        if(Keyboard::isKeyPressed(DOWN))    speedY += NORMAL_SPEED;
-        if(Keyboard::isKeyPressed(RIGHT))   speedX += NORMAL_SPEED;
-        if(Keyboard::isKeyPressed(LEFT))    speedX -= NORMAL_SPEED;
+        if(Keyboard::isKeyPressed(UP))      speedY -= FAST_SPEED; 
+        if(Keyboard::isKeyPressed(DOWN))    speedY += FAST_SPEED; 
+        if(Keyboard::isKeyPressed(RIGHT))   speedX += FAST_SPEED; 
+        if(Keyboard::isKeyPressed(LEFT))    speedX -= FAST_SPEED; 
         
         speedX = ((shape.getGlobalBounds().left < 0 && speedX < 0) ||
                 (shape.getGlobalBounds().left+shape.getGlobalBounds().width > resolutionX && speedX > 0)) ?
@@ -49,7 +48,7 @@ int main()
                 (shape.getGlobalBounds().top+shape.getGlobalBounds().width > resolutionY && speedY > 0)) ?
             -speedY : speedY;
         
-        shape.move(speedX, speedY*NORMAL_SPEED);
+        shape.move(speedX*NORMAL_SPEED, speedY*NORMAL_SPEED);
 
         window.clear();
         window.draw(shape);
