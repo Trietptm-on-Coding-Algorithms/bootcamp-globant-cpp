@@ -39,12 +39,12 @@ int main()
         if(Keyboard::isKeyPressed(LEFT))    speedX -= NORMAL_SPEED;
 
        
-        if((shape.getGlobalBounds().left < 0 && speedX < 0) ||
-                (shape.getGlobalBounds().left+shape.getGlobalBounds().width > resolutionX && speedX > 0))
-            speedX -= speedX;
-        if((shape.getGlobalBounds().top < 0 && speedY < 0) ||
-                (shape.getGlobalBounds().top+shape.getGlobalBounds().width > resolutionY && speedY > 0))
-            speedY -= speedY;
+        speedX -= ((shape.getGlobalBounds().left < 0 && speedX < 0) ||
+                (shape.getGlobalBounds().left+shape.getGlobalBounds().width > resolutionX && speedX > 0)) ?
+            speedX : 0;
+        speedY -= ((shape.getGlobalBounds().top < 0 && speedY < 0) ||
+                (shape.getGlobalBounds().top+shape.getGlobalBounds().width > resolutionY && speedY > 0)) ?
+            speedY : 0;
         
 
         shape.move(speedX, speedY);
