@@ -1,5 +1,4 @@
 #include "ball.hpp"
-#include "resolution.hpp"
 Ball::Ball(float size): Super(size)
 {
     this->setSpeedX(0);
