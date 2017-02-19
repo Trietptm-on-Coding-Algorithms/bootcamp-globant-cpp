@@ -30,11 +30,11 @@ private:
     RenderWindow window;
     CircleShape ball;
     RectangleShape rectangle;
+    void initializeGame();
 
 public:
     Game(CircleShape ball, RectangleShape rectangle, Resolution resolution);
     ~Game(){}
-    void initializeGame();
     void play();
 };
 
