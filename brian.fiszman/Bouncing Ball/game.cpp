@@ -1,6 +1,6 @@
 #include "game.hpp"
 
-Game::Game(CircleShape ball, RectangleShape rectangle, Resolution resolution) : resolution(DEF_RES_X, DEF_RES_Y), window(VideoMode(this->resolution.getX(), this->resolution.getY()), GAME_TITLE)
+Game::Game(Ball ball, RectangleShape rectangle, Resolution resolution) : resolution(DEF_RES_X, DEF_RES_Y), window(VideoMode(this->resolution.getX(), this->resolution.getY()), GAME_TITLE)
 {
     this->ball       = ball;
     this->rectangle  = rectangle;
@@ -17,34 +17,30 @@ void Game::initializeGame()
 
 void Game::play()
 {
-    float speedX = 0, speedY = 0;
     this->initializeGame();
-    while (window.isOpen())
+    while (this->window.isOpen())
     {
         Event event;
-        while (window.pollEvent(event))
+        while (this->window.pollEvent(event))
         {
             if (event.type == Event::Closed)
-                window.close();
+                this->window.close();
         }
         
-        speedY += GRAVITY;
-        speedY -= SLOWDOWN*speedY;
-        speedX -= SLOWDOWN*speedX;
+        this->ball.setSpeedY(this->ball.getSpeedY() + GRAVITY);
+        this->ball.setSpeedY(this->ball.getSpeedY() - (this->ball.getSpeedY())*SLOWDOWN);
+        this->ball.setSpeedX(this->ball.getSpeedX() - (this->ball.getSpeedX())*SLOWDOWN);
 
-        if(Keyboard::isKeyPressed(UP))      speedY -= MOVEMENT_SPEED; 
-        if(Keyboard::isKeyPressed(DOWN))    speedY += MOVEMENT_SPEED; 
-        if(Keyboard::isKeyPressed(RIGHT))   speedX += MOVEMENT_SPEED; 
-        if(Keyboard::isKeyPressed(LEFT))    speedX -= MOVEMENT_SPEED; 
+        if(Keyboard::isKeyPressed(UP))      this->ball.setSpeedY(this->ball.getSpeedY() - MOVEMENT_SPEED); 
+        if(Keyboard::isKeyPressed(DOWN))    this->ball.setSpeedY(this->ball.getSpeedY() + MOVEMENT_SPEED); 
+        if(Keyboard::isKeyPressed(RIGHT))   this->ball.setSpeedX(this->ball.getSpeedX() + MOVEMENT_SPEED); 
+        if(Keyboard::isKeyPressed(LEFT))    this->ball.setSpeedX(this->ball.getSpeedX() - MOVEMENT_SPEED); 
         if(Keyboard::isKeyPressed(QUIT))    break;
 
-        speedX = ((B_POS.left < 0 && speedX < 0) || (B_POS.left+B_POS.width > this->resolution.getX() && speedX > 0)) ?
-            -speedX : speedX;
-        speedY = ((B_POS.top < 0 && speedY < 0) || (B_POS.top+B_POS.height > this->resolution.getY() && speedY > 0) ||
-                (B_POS.intersects(R_POS))) ?
-            -speedY : speedY;
-        
-        this->ball.move(speedX*IDLE_SPEED, speedY*IDLE_SPEED);
+        this->ball.setSpeedX((this->ball.hasCollidedOnX(this->resolution)) ? -this->ball.getSpeedX() : this->ball.getSpeedX());
+        this->ball.setSpeedY((this->ball.hasCollidedOnY(this->rectangle, this->resolution)) ? -this->ball.getSpeedY() : this->ball.getSpeedY());
+
+        this->ball.move(this->ball.getSpeedX()*IDLE_SPEED, this->ball.getSpeedY()*IDLE_SPEED);
 
         this->window.clear();
         this->window.draw(this->ball);

@@ -2,6 +2,7 @@
 #define GAME_H
 #include <SFML/Graphics.hpp>
 #include "resolution.hpp"
+#include "ball.hpp"
 
 using namespace sf;
 
@@ -27,12 +28,12 @@ class Game
 private:
     Resolution resolution;
     RenderWindow window;
-    CircleShape ball;
+    Ball ball;
     RectangleShape rectangle;
     void initializeGame();
 
 public:
-    Game(CircleShape ball, RectangleShape rectangle, Resolution resolution);
+    Game(Ball ball, RectangleShape rectangle, Resolution resolution);
     ~Game(){}
     void play();
 };
