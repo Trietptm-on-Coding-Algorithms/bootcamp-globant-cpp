@@ -4,10 +4,10 @@
 
 int main()
 {
+    struct Screen *screen = new Screen();
     Ball ball(10.f);
     RectangleShape rectangle(Vector2f(120, 5));
-    Resolution resolution(800, 600);
-    Game game(ball, rectangle, resolution);
+    Game game(ball, rectangle, screen);
     game.play();
     return 0;
 }

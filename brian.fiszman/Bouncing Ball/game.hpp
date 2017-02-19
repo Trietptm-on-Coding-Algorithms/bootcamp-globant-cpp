@@ -20,18 +20,28 @@ using namespace sf;
 
 #define GAME_TITLE      "Bouncing Ball"
 
+#define RES             this->screen->resolution
+#define WINDOW             this->screen->window
+
+struct Screen
+{
+    Resolution resolution;
+    RenderWindow window;
+
+    Screen();
+};
+
 class Game
 {
 private:
-    Resolution resolution;
-    RenderWindow window;
+    struct Screen *screen;
     Ball ball;
     RectangleShape rectangle;
     void initializeGame();
 
 public:
-    Game(Ball ball, RectangleShape rectangle, Resolution resolution);
-    ~Game(){}
+    Game(Ball ball, RectangleShape rectangle, struct Screen *screen);
+    ~Game();
     void play();
 };
 
