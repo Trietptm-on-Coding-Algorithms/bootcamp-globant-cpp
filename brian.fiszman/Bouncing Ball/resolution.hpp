@@ -1,7 +1,8 @@
 #define DEF_RES_X 800
 #define DEF_RES_Y 600
 
-class Resolution {
+class Resolution
+{
     private:
         unsigned int resX;
         unsigned int resY;

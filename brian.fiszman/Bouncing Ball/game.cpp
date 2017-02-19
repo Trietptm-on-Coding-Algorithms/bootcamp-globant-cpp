@@ -13,7 +13,6 @@ void Game::initializeGame()
     this->rectangle.setPosition(this->resolution.getX()/2, this->resolution.getY()/2);
     this->rectangle.setOrigin(this->rectangle.getSize().x/2, this->rectangle.getSize().y/2);
     this->ball.setFillColor(Color::Blue);
- 
 }
 
 void Game::play()

@@ -22,7 +22,6 @@ using namespace sf;
 
 #define GAME_TITLE      "Bouncing Ball"
 
-
 class Game
 {
 private:
