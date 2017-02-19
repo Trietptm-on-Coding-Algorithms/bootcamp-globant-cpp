@@ -19,6 +19,7 @@ using namespace sf;
 #define RIGHT           Keyboard::Right
 #define LEFT            Keyboard::Left
 
+#define GAME_TITLE      "Bouncing Ball"
 
 
 class Game
