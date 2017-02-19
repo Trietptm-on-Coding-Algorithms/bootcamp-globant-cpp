@@ -18,6 +18,7 @@ using namespace sf;
 #define DOWN            Keyboard::Down
 #define RIGHT           Keyboard::Right
 #define LEFT            Keyboard::Left
+#define QUIT            Keyboard::Q
 
 #define GAME_TITLE      "Bouncing Ball"
 
@@ -33,6 +34,7 @@ private:
 public:
     Game(CircleShape ball, RectangleShape rectangle, Resolution resolution);
     ~Game(){}
+    void initializeGame();
     void play();
 };
 

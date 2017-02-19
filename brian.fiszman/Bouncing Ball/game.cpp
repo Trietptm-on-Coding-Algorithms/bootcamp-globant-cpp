@@ -7,13 +7,19 @@ Game::Game(CircleShape ball, RectangleShape rectangle, Resolution resolution) : 
     this->resolution = resolution;
 }
 
-void Game::play()
+void Game::initializeGame()
 {
-    float speedX = 0, speedY = 0;
     this->window.setFramerateLimit(60);
     this->rectangle.setPosition(this->resolution.getX()/2, this->resolution.getY()/2);
     this->rectangle.setOrigin(this->rectangle.getSize().x/2, this->rectangle.getSize().y/2);
     this->ball.setFillColor(Color::Blue);
+ 
+}
+
+void Game::play()
+{
+    float speedX = 0, speedY = 0;
+    this->initializeGame();
     while (window.isOpen())
     {
         Event event;
@@ -31,7 +37,8 @@ void Game::play()
         if(Keyboard::isKeyPressed(DOWN))    speedY += MOVEMENT_SPEED; 
         if(Keyboard::isKeyPressed(RIGHT))   speedX += MOVEMENT_SPEED; 
         if(Keyboard::isKeyPressed(LEFT))    speedX -= MOVEMENT_SPEED; 
-        
+        if(Keyboard::isKeyPressed(QUIT))    break;
+
         speedX = ((B_POS.left < 0 && speedX < 0) || (B_POS.left+B_POS.width > this->resolution.getX() && speedX > 0)) ?
             -speedX : speedX;
         speedY = ((B_POS.top < 0 && speedY < 0) || (B_POS.top+B_POS.height > this->resolution.getY() && speedY > 0) ||
