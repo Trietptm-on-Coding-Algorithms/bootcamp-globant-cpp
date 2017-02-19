@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include "screen.hpp"
 
 Game::Game(Ball ball, RectangleShape rectangle, struct Screen *screen) {
     this->ball       = ball;
