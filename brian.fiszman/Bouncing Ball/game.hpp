@@ -12,9 +12,6 @@ using namespace sf;
 #define GRAVITY         ACCELERATION*9.81
 #define SLOWDOWN        0.005
 
-#define B_POS           this->ball.getGlobalBounds()
-#define R_POS           this->rectangle.getGlobalBounds()
-
 #define UP              Keyboard::Up
 #define DOWN            Keyboard::Down
 #define RIGHT           Keyboard::Right
