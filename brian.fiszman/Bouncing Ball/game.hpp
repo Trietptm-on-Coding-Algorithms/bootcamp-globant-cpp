@@ -2,6 +2,7 @@
 #define GAME_H
 #include <SFML/Graphics.hpp>
 #include "resolution.hpp"
+#include "screen.hpp"
 #include "ball.hpp"
 
 using namespace sf;
@@ -17,19 +18,6 @@ using namespace sf;
 #define RIGHT           Keyboard::Right
 #define LEFT            Keyboard::Left
 #define QUIT            Keyboard::Q
-
-#define GAME_TITLE      "Bouncing Ball"
-
-#define RES             this->screen->resolution
-#define WINDOW             this->screen->window
-
-struct Screen
-{
-    Resolution resolution;
-    RenderWindow window;
-
-    Screen();
-};
 
 class Game
 {

@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "resolution.hpp"
+#include "screen.hpp"
 #ifndef BALL_H
 #define BALL_H
 
@@ -19,8 +20,8 @@ class Ball: public CircleShape
         float getSpeedY();
         void setSpeedX(float speedX);
         void setSpeedY(float speedY);
-        bool hasCollidedOnX(Resolution resolution);
-        bool hasCollidedOnY(RectangleShape shp, Resolution resolution);
+        bool hasCollidedOnX();
+        bool hasCollidedOnY(RectangleShape shp);
 };
 
 #endif

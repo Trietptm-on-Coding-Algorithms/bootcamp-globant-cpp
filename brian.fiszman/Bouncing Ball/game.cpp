@@ -1,6 +1,5 @@
 #include "game.hpp"
-
-Screen::Screen(): resolution(DEF_RES_X, DEF_RES_Y),window(VideoMode(this->resolution.getX(), this->resolution.getY()), GAME_TITLE){}
+#include "screen.hpp"
 
 Game::Game(Ball ball, RectangleShape rectangle, struct Screen *screen) {
     this->ball       = ball;
@@ -43,8 +42,8 @@ void Game::play()
         if(Keyboard::isKeyPressed(LEFT))    this->ball.setSpeedX(this->ball.getSpeedX() - MOVEMENT_SPEED); 
         if(Keyboard::isKeyPressed(QUIT))    break;
 
-        this->ball.setSpeedX((this->ball.hasCollidedOnX(RES)) ? -this->ball.getSpeedX() : this->ball.getSpeedX());
-        this->ball.setSpeedY((this->ball.hasCollidedOnY(this->rectangle, RES)) ? -this->ball.getSpeedY() : this->ball.getSpeedY());
+        this->ball.setSpeedX((this->ball.hasCollidedOnX()) ? -this->ball.getSpeedX() : this->ball.getSpeedX());
+        this->ball.setSpeedY((this->ball.hasCollidedOnY(this->rectangle)) ? -this->ball.getSpeedY() : this->ball.getSpeedY());
 
         this->ball.move(this->ball.getSpeedX()*IDLE_SPEED, this->ball.getSpeedY()*IDLE_SPEED);
 

@@ -11,14 +11,14 @@ Ball::Ball()
     this->setSpeedY(0);
 }
 
-bool Ball::hasCollidedOnX(Resolution resolution)
+bool Ball::hasCollidedOnX()
 {
-    return ((this->getGlobalBounds().left < 0 && this->getSpeedX() < 0) || (this->getGlobalBounds().left+this->getGlobalBounds().width > resolution.getX() && this->getSpeedX() > 0));
+    return ((this->getGlobalBounds().left < 0 && this->getSpeedX() < 0) || (this->getGlobalBounds().left+this->getGlobalBounds().width > RES.getX() && this->getSpeedX() > 0));
 }
 
-bool Ball::hasCollidedOnY(RectangleShape shp, Resolution resolution)
+bool Ball::hasCollidedOnY(RectangleShape shp)
 {
-    return ((this->getGlobalBounds().top < 0 && this->getSpeedY() < 0) || (this->getGlobalBounds().top+this->getGlobalBounds().height > resolution.getY() && this->getSpeedY() > 0) || (this->getGlobalBounds().intersects(shp.getGlobalBounds())));
+    return ((this->getGlobalBounds().top < 0 && this->getSpeedY() < 0) || (this->getGlobalBounds().top+this->getGlobalBounds().height > RES.getY() && this->getSpeedY() > 0) || (this->getGlobalBounds().intersects(shp.getGlobalBounds())));
 }
 
 float Ball::getSpeedX(){ return this->speedX; }
