@@ -1,5 +1,3 @@
-#include "resolution.hpp"
-#include "screen.hpp"
 #include <SFML/Graphics.hpp>
 #ifndef BALL_H
 #define BALL_H
@@ -15,13 +13,13 @@ private:
 
 public:
     Ball();
-    explicit Ball(float size);
+    Ball(float size);
     float getSpeedX();
     float getSpeedY();
     void setSpeedX(float speedX);
     void setSpeedY(float speedY);
-    bool hasCollidedOnX();
-    bool hasCollidedOnY(RectangleShape shp);
+    bool hasCollidedOnX(const RenderWindow& window);
+    bool hasCollidedOnY(const RenderWindow& window, const RectangleShape& shp);
 };
 
 #endif

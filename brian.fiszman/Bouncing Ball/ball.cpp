@@ -1,32 +1,33 @@
 #include "ball.hpp"
 
-Ball::Ball(float size) : Super(size)
+Ball::Ball(float size)
+    : Super(size)
 {
-    this->setSpeedX(0);
-    this->setSpeedY(0);
+    setSpeedX(0);
+    setSpeedY(0);
 }
 
 Ball::Ball()
 {
-    this->setSpeedX(0);
-    this->setSpeedY(0);
+    setSpeedX(0);
+    setSpeedY(0);
 }
 
-bool Ball::hasCollidedOnX()
+bool Ball::hasCollidedOnX(const RenderWindow& window)
 {
-    return ((this->getGlobalBounds().left < 0 && this->getSpeedX() < 0)
-        || (this->getGlobalBounds().left + this->getGlobalBounds().width
-                   > RES.getX()
-               && this->getSpeedX() > 0));
+    return ((getGlobalBounds().left < 0 && getSpeedX() < 0)
+        || (getGlobalBounds().left + getGlobalBounds().width
+                   > window.getSize().x
+               && getSpeedX() > 0));
 }
 
-bool Ball::hasCollidedOnY(RectangleShape shp)
+bool Ball::hasCollidedOnY(const RenderWindow& window, const RectangleShape& shp)
 {
-    return ((this->getGlobalBounds().top < 0 && this->getSpeedY() < 0)
-        || (this->getGlobalBounds().top + this->getGlobalBounds().height
-                   > RES.getY()
-               && this->getSpeedY() > 0)
-        || (this->getGlobalBounds().intersects(shp.getGlobalBounds())));
+    return ((getGlobalBounds().top < 0 && getSpeedY() < 0)
+        || (getGlobalBounds().top + getGlobalBounds().height
+                   > window.getSize().y
+               && getSpeedY() > 0)
+        || (getGlobalBounds().intersects(shp.getGlobalBounds())));
 }
 
 float Ball::getSpeedX() { return this->speedX; }

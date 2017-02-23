@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 #include <SFML/Graphics.hpp>
-#include "resolution.hpp"
-#include "screen.hpp"
 #include "ball.hpp"
 
 using namespace sf;
@@ -22,13 +20,13 @@ using namespace sf;
 class Game
 {
 private:
-    struct Screen *screen;
+    RenderWindow &window;
     Ball ball;
     RectangleShape rectangle;
     void initializeGame();
 
 public:
-    Game(Ball ball, RectangleShape rectangle, struct Screen *screen);
+    Game(RenderWindow &window, Ball &ball, RectangleShape &rectangle);
     ~Game();
     void play();
 };
