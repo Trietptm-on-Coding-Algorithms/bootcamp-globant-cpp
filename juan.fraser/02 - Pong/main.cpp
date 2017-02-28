@@ -13,7 +13,7 @@ int main() {
 	// INIT //
 	int screenX = 640;
 	int screenY = 400;
-	sf::RenderWindow window(sf::VideoMode(screenX, screenY), "Pong Beta 0.2");
+	sf::RenderWindow window(sf::VideoMode(screenX, screenY), "Pong Beta 0.3");
 	window.setFramerateLimit(60);
 
 	sf::CircleShape ball(10.f);
