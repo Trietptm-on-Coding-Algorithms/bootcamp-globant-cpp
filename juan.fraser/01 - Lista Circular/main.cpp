@@ -4,52 +4,49 @@ using namespace std;
 
 typedef unsigned int size_t;		// Si usan visual studio (probablemente) no necesitan este typedef
 
-template <class T>
 struct ListElement {
-	T val;
+	int val;
 	ListElement* next;
 };
 
-template <class T>
 class CircularList {
 public:
 	CircularList();
 	~CircularList();
 
-	ListElement<T>* pushFront(T elemVal);
-	ListElement<T>* pushBack(T elemVal);
+	ListElement* pushFront(int elemVal);
+	ListElement* pushBack(int elemVal);
 
-	ListElement<T>* insertNextTo(ListElement<T>* element, T elemVal);
-	void erase(ListElement<T>* element);
+	ListElement* insertNextTo(ListElement* element, int elemVal);
+	void erase(ListElement* element);
 
 	void clear();
 
-	ListElement<T>* getFirst();
-	ListElement<T>* getLast();
+	ListElement* getFirst();
+	ListElement* getLast();
 
 	size_t getElementCount();
 
 private:
-	ListElement<T>* root;
-	ListElement<T>* tail;
-	ListElement<T>* buildNode(T elemVal, ListElement<T>* next);
+	ListElement* root;
+	ListElement* tail;
+	ListElement* buildNode(int elemVal, ListElement* next);
 };
 
 //  Constructor & Destructor  //
-template <class T>
-CircularList<T>::CircularList() {
+
+CircularList::CircularList() {
 	root = nullptr;
 	tail = nullptr;
 }
-template <class T>
-CircularList<T>::~CircularList() {
+CircularList::~CircularList() {
 	clear();
 }
 
 //  Adders  //
-template <class T>
-ListElement<T>* CircularList<T>::buildNode(T elemVal, ListElement<T>* next) {
-	ListElement<T>* newNode = new ListElement<T>();
+
+ListElement* CircularList::buildNode(int elemVal, ListElement* next) {
+	ListElement* newNode = new ListElement();
 	newNode->val = elemVal;
 	if (next == nullptr)
 		newNode->next = newNode;
@@ -57,9 +54,9 @@ ListElement<T>* CircularList<T>::buildNode(T elemVal, ListElement<T>* next) {
 		newNode->next = next;
 	return newNode;
 }
-template <class T>
-ListElement<T>* CircularList<T>::pushFront(T elemVal) {
-	ListElement<T>* newNode;
+
+ListElement* CircularList::pushFront(int elemVal) {
+	ListElement* newNode;
 	if (root == nullptr) {
 		newNode = buildNode(elemVal, nullptr);
 		root = newNode;
@@ -71,9 +68,8 @@ ListElement<T>* CircularList<T>::pushFront(T elemVal) {
 	}
 	return newNode;
 }
-template <class T>
-ListElement<T>* CircularList<T>::pushBack(T elemVal) {
-	ListElement<T>* newNode;
+ListElement* CircularList::pushBack(int elemVal) {
+	ListElement* newNode;
 	if (root == nullptr) {
 		newNode = buildNode(elemVal, nullptr);
 		root = newNode;
@@ -85,16 +81,15 @@ ListElement<T>* CircularList<T>::pushBack(T elemVal) {
 	}
 	return newNode;
 }
-template <class T>
-ListElement<T>* CircularList<T>::insertNextTo(ListElement<T>* element, T elemVal) {
-	ListElement<T>* newNode = nullptr;
+ListElement* CircularList::insertNextTo(ListElement* element, int elemVal) {
+	ListElement* newNode = nullptr;
 	if (root == nullptr && element == nullptr)
 		newNode = pushFront(elemVal);
 	else if (root != nullptr && element != nullptr) {
-		ListElement<T>* itr = root;
+		ListElement* itr = root;
 		do {
 			if (itr == element) {
-				newNode = new ListElement<int>();
+				newNode = new ListElement();
 				newNode->val = elemVal;
 				newNode->next = itr->next;
 				itr->next = newNode;
@@ -109,8 +104,8 @@ ListElement<T>* CircularList<T>::insertNextTo(ListElement<T>* element, T elemVal
 }
 
 //  Removers  //
-template <class T>
-void CircularList<T>::erase(ListElement<T>* element) {
+
+void CircularList::erase(ListElement* element) {
 	if (root != nullptr) {
 		if (root == tail) {		// solo hay un elemento en la lista
 			if (root == element) {
@@ -119,8 +114,8 @@ void CircularList<T>::erase(ListElement<T>* element) {
 				tail = nullptr;
 			}
 		} else {				// hay más de un elemento en la lista
-			ListElement<T>* itr = root;
-			ListElement<T>* prev = tail;
+			ListElement* itr = root;
+			ListElement* prev = tail;
 			do {
 				if (itr == element) {
 					prev->next = itr->next;
@@ -137,12 +132,11 @@ void CircularList<T>::erase(ListElement<T>* element) {
 		}
 	}
 }
-template <class T>
-void CircularList<T>::clear() {
+void CircularList::clear() {
 	if (root != nullptr) {
-		ListElement<T>* itr = root;
+		ListElement* itr = root;
 		do {
-			ListElement<T>* temp = itr->next;
+			ListElement* temp = itr->next;
 			delete itr;
 			itr = temp;
 		} while (itr != root);
@@ -153,19 +147,17 @@ void CircularList<T>::clear() {
 }
 
 //  Getters  //
-template <class T>
-ListElement<T>* CircularList<T>::getFirst() {
+
+ListElement* CircularList::getFirst() {
 	return root;
 }
-template <class T>
-ListElement<T>* CircularList<T>::getLast() {
+ListElement* CircularList::getLast() {
 	return tail;
 }
-template <class T>
-size_t CircularList<T>::getElementCount() {
+size_t CircularList::getElementCount() {
 	size_t count = 0;
 	if (root != nullptr) {
-		ListElement<T>* itr = root;
+		ListElement* itr = root;
 		do {
 			count++;
 			itr = itr->next;
@@ -179,7 +171,7 @@ size_t CircularList<T>::getElementCount() {
 //  TESTS  //
 
 void testPushBack() {
-	CircularList<int> listA;
+	CircularList listA;
 	assert(listA.getElementCount() == 0);
 	assert(listA.getLast() == listA.getFirst());
 
@@ -203,7 +195,7 @@ void testPushBack() {
 
 
 	size_t sum = 0;
-	ListElement<int>* itr = listA.getFirst();
+	ListElement* itr = listA.getFirst();
 	do {
 		sum += itr->val;
 		itr = itr->next;
@@ -212,12 +204,12 @@ void testPushBack() {
 }
 
 void testErase() {
-	CircularList<int> list;
-	ListElement<int>* one = list.pushBack(1);
-	ListElement<int>* two = list.pushBack(2);
-	ListElement<int>* three = list.pushBack(3);
-	ListElement<int>* four = list.pushBack(4);
-	ListElement<int>* five = list.pushBack(5);
+	CircularList list;
+	ListElement* one = list.pushBack(1);
+	ListElement* two = list.pushBack(2);
+	ListElement* three = list.pushBack(3);
+	ListElement* four = list.pushBack(4);
+	ListElement* five = list.pushBack(5);
 	assert(list.getElementCount() == 5);
 	assert(list.getLast()->next == list.getFirst());
 
@@ -241,7 +233,7 @@ void testErase() {
 }
 
 void testPushFront() {
-	CircularList<int> list;
+	CircularList list;
 	list.pushFront(1);
 	list.pushFront(2);
 	list.pushFront(3);
@@ -251,20 +243,20 @@ void testPushFront() {
 }
 
 void testInsertNextTo() {
-	CircularList<int> list;
-	ListElement<int>* one = list.insertNextTo(nullptr,1);
+	CircularList list;
+	ListElement* one = list.insertNextTo(nullptr,1);
 	assert(list.getFirst() == one);
 	assert(list.getLast() == one);
-	ListElement<int>* two = list.insertNextTo(one, 2);
+	ListElement* two = list.insertNextTo(one, 2);
 	assert(list.getLast() == two);
-	ListElement<int>* three = list.insertNextTo(one, 3);
+	ListElement* three = list.insertNextTo(one, 3);
 	assert(list.getLast() == two);
-	ListElement<int>* four = list.insertNextTo(one, 4);
+	ListElement* four = list.insertNextTo(one, 4);
 	assert(list.getLast() == two);
 	assert(list.getElementCount() == 4);
 	list.erase(four);
 	assert(list.getElementCount() == 3);
-	ListElement<int>* five = list.insertNextTo(four, 5);
+	ListElement* five = list.insertNextTo(four, 5);
 	assert(list.getElementCount() == 3);
 	assert(five == nullptr);
 	list.erase(one);
