@@ -3,9 +3,10 @@
 
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
+#include "game.h"
 
 //using namespace sf;
-
+using namespace std;
 
 
 int main() {
@@ -15,7 +16,19 @@ int main() {
 	int screenY = 400;
 	sf::RenderWindow window(sf::VideoMode(screenX, screenY), "Pong Beta 0.3");
 	window.setFramerateLimit(60);
+	
+	sf::RenderWindow* w = &window;
+	const int maxScore = 10;
+	game g(maxScore, w);
+	int ret = g.run();
+	if (ret < 0) {
+		// EXITED
+	}
+	else {
+		// SOMEONE WON
+	}
 
+	/*
 	sf::CircleShape ball(10.f);
 	float vx=20, vy=0, ax=0, ay=9.8f;
 	float dv=0.01f, da=0.01f;
@@ -109,7 +122,7 @@ int main() {
 		window.draw(rectangle);
 
 		window.display();
-	}
+	}*/
 	return 0;
 }
 

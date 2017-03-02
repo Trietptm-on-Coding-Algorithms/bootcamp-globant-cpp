@@ -10,19 +10,19 @@ private:
 	sf::Vector2f pos;
 	sf::Vector2f oldPos;	// for advanced collision checking
 	
-	static const float minPos;
-	static const float maxPos;
+	int minPos;
+	int maxPos;
 
-	static const float length;
-	static const float speed;
+	float length = 32.0f;
+	float speed = 0.2f;
 
 public:
-	tab();
+	tab(int x, int y);
 	~tab();
 
-	void setPosition();
-	void moveUp(float dt);
-	void moveDown(float dt);
+	void setPosition(float y);
+	void moveUp(int dt);
+	void moveDown(int dt);
 
 
 	

@@ -2,31 +2,49 @@
 #include "player.h"
 
 
-player::player(sf::Keyboard::Key up, sf::Keyboard::Key down) {
+player::player(int x, int y, sf::Keyboard::Key up, sf::Keyboard::Key down) {
 	this->up = up;
 	this->down = down;
-	myTab = tab();
+	myTab = new tab(x,y);
+	this->id = this->idCounter;
+	idCounter++;
+}
+player::player() {
+
+}
+player::~player() {
+	delete myTab;
 }
 
 
-player::~player()
-{
-}
-
-
-void player::reset() {
-	myTab = tab();
-	score = 0;
-}
 void player::addScore() {
 	score++;
 }
 int player::getScore() {
 	return score;
 }
-void player::pressedUp(float dt) {
-	myTab.moveUp(dt);
+void player::pressedUp(int dt) {
+	myTab->moveUp(dt);
 }
-void player::pressedDown(float dt) {
-	myTab.moveDown(dt);
+void player::pressedDown(int dt) {
+	myTab->moveDown(dt);
+}
+
+tab* player::getTab() {
+	return myTab;
+}
+
+int player::getID() {
+	return id;
+}
+
+sf::Keyboard::Key player::getUp() {
+	return up;
+}
+sf::Keyboard::Key player::getDown() {
+	return down;
+}
+
+void player::pUpdate(int dt) {
+
 }
