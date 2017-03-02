@@ -137,6 +137,7 @@ void Game::Op_Play()
 	const unsigned int FPS = 60;
 	window.setFramerateLimit(FPS);
 
+
 	sf::Event event;
 	//Main Game Loop
 	while (window.isOpen())
@@ -186,10 +187,12 @@ void Game::Op_Play()
 			restart = false;
 		}
 		if (restart == false)
+		{	
 			ball.moved(speedBallX*dx, speedBallY*dy);
-		playerOne.moved(speedOneX*dx, speedOneY*dy);
-		playerTwo.moved(speedTwoX*dx, speedTwoY*dy);
-
+			playerOne.moved(speedOneX*dx, speedOneY*dy);
+			playerTwo.moved(speedTwoX*dx, speedTwoY*dy);
+		}
+		
 		// Colisiones de la bola con las paredes
 
 		if (ball.collisionLeft())
