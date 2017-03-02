@@ -1,6 +1,5 @@
 #include "game.hpp"
-
-Game::Game(RenderWindow &window, Ball &ball, RectangleShape &rectangle): window(window), ball(ball), rectangle(rectangle){}
+Game::Game(RenderWindow &window, Ball &ball, RectangleShape &rectangle, Player p1, Player p2): window(window), ball(ball), rectangle(rectangle), p1(p1), p2(p2){}
 
 Game::~Game() {}
 
@@ -9,11 +8,15 @@ void Game::initializeGame()
     window.setFramerateLimit(60);
     rectangle.setPosition(window.getSize().x / 2, window.getSize().y / 2);
     rectangle.setOrigin(rectangle.getSize().x / 2, rectangle.getSize().y / 2);
+    rectangle.setOutlineThickness(4);
+    ball.setPosition(700, 100);
+    ball.setOrigin(ball.getRadius(), ball.getRadius());
     ball.setFillColor(Color::Blue);
 }
 
 void Game::play()
 {
+    CircleShape shp(1.f);
     initializeGame();
     while (window.isOpen()) 
     {
@@ -32,13 +35,18 @@ void Game::play()
         if (Keyboard::isKeyPressed(LEFT))   ball.setSpeedX(ball.getSpeedX() - MOVEMENT_SPEED);
         if (Keyboard::isKeyPressed(QUIT))   break;
 
-        ball.setSpeedX((ball.hasCollidedOnX(window)) ? -ball.getSpeedX() : ball.getSpeedX());
-        ball.setSpeedY((ball.hasCollidedOnY(window, rectangle)) ? -ball.getSpeedY() : ball.getSpeedY());
+        ball.generateCollisions(window);
+        ball.generateCollisions(rectangle);
 
         ball.move(ball.getSpeedX() * IDLE_SPEED, ball.getSpeedY() * IDLE_SPEED);
 
+        shp.setPosition(ball.getPosition().x, ball.getPosition().y);
         window.clear();
         window.draw(ball);
+        if(ball.shareYSpaceWith(rectangle))
+        {
+            window.draw(shp);
+        }
         window.draw(rectangle);
         window.display();
     }

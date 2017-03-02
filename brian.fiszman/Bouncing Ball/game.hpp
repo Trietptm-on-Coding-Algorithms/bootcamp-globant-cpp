@@ -2,7 +2,7 @@
 #define GAME_H
 #include <SFML/Graphics.hpp>
 #include "ball.hpp"
-
+#include "player.hpp"
 using namespace sf;
 
 #define IDLE_SPEED      0.1f
@@ -20,13 +20,15 @@ using namespace sf;
 class Game
 {
 private:
+    Player p1;
+    Player p2;
     RenderWindow &window;
     Ball ball;
     RectangleShape rectangle;
     void initializeGame();
 
 public:
-    Game(RenderWindow &window, Ball &ball, RectangleShape &rectangle);
+    Game(RenderWindow &window, Ball &ball, RectangleShape &rectangle, Player p1, Player p2);
     ~Game();
     void play();
 };

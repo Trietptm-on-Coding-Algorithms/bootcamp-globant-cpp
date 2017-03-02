@@ -18,8 +18,16 @@ public:
     float getSpeedY();
     void setSpeedX(float speedX);
     void setSpeedY(float speedY);
+    bool shareXSpaceWith(const RectangleShape& shp);
+    bool shareYSpaceWith(const RectangleShape& shp);
+    bool hasCollided(const RenderWindow& window);
+    bool hasCollided(const RectangleShape& shp); 
     bool hasCollidedOnX(const RenderWindow& window);
-    bool hasCollidedOnY(const RenderWindow& window, const RectangleShape& shp);
+    bool hasCollidedOnX(const RectangleShape& shp);
+    bool hasCollidedOnY(const RenderWindow& window);
+    bool hasCollidedOnY(const RectangleShape& shp);
+    void generateCollisions(const RectangleShape &shp);
+    void generateCollisions(const RenderWindow &window);
 };
 
 #endif
