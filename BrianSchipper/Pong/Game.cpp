@@ -94,9 +94,8 @@ void Game::Op_Play()
 	double speedOneX = 0, speedOneY = 0;
 	double speedTwoX = 0, speedTwoY = 0;
 	double dx = 0.1, dy = 0.1;
-	int i = 0;
-	int j = 0;
-	float a;
+	int scoreP1 = 0;
+	int scoreP2 = 0;
 	bool restart  = true;
 
 	sf::Clock clock;
@@ -168,6 +167,7 @@ void Game::Op_Play()
 		// Iniciar el juego con la bola en el centro y movimiento random
 		if (time.asSeconds() > 3.f && restart == true)
 		{
+			float a;
 			speedBallX = speedZero;
 			speedBallY = speedZero;
 			ball.moved(speedBallX*dx, speedBallY*dy);
@@ -200,7 +200,7 @@ void Game::Op_Play()
 			text2.setFillColor(sf::Color::Cyan);
 			text2.setString("100!");
 			text2.setCharacterSize(size);
-			score.LoadScore(i, j += 100);
+			score.LoadScore(scoreP1, scoreP2 += 100);
 			ball.position(MaxSceenX / 2, MaxSceenY / 2);
 			speedBallX = 0;
 			speedBallY = 0;
@@ -216,7 +216,7 @@ void Game::Op_Play()
 			text2.setFillColor(sf::Color::Cyan);
 			text2.setString("100!");
 			text2.setCharacterSize(size);
-			score.LoadScore(i += 100, j);
+			score.LoadScore(scoreP1 += 100,scoreP2 );
 			ball.position(MaxSceenX / 2, MaxSceenY / 2);
 			speedBallX = 0;
 			speedBallY = 0;
