@@ -1,35 +1,26 @@
 #pragma once
-#include "tab.h"
-
+#include "SFML\Graphics.hpp"
+#include "Presence.h"
+#include "XYPosition.h"
+#include "Points.h"
+#include "ReceivesVInput.h"
 
 using namespace std;
 
-class player
+class Player : Presence, XYPosition, public Points, public ReceivesVInput
 {
 private:
-	static int idCounter;
-	int id;
-	tab* myTab;
-	int score;
-	sf::Keyboard::Key up;
-	sf::Keyboard::Key down;
-
+	sf::Vector2f initPos;
 public:
-	player();
-	player(int x, int y, sf::Keyboard::Key up, sf::Keyboard::Key down);
-	~player();
-	
-	bool movingUp;
-	bool movingDown;
+	string name;
 
-	void addScore();
-	int getScore();
-	void pressedUp(int dt);
-	void pressedDown(int dt);
-	tab* getTab();
-	int getID();
-	sf::Keyboard::Key getUp();
-	sf::Keyboard::Key getDown();
-	void pUpdate(int dt);
+	void updatePos(int ms);
+	void collision(float yMin, float yMax);
 
+	void reset();
+
+	sf::Shape* getShape();
+	Player(string name, sf::Vector2f size, sf::Vector2f pos, sf::Keyboard::Key up, sf::Keyboard::Key down);
+	~Player();
 };
+
