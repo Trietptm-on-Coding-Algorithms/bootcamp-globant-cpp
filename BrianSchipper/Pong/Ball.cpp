@@ -51,23 +51,43 @@ sf::Vector2f Ball::getPosicion()
 
 bool Ball::intersectionSide2(Jugador &player)
 {
-	return ( sprite.getPosition().x + sprite.getGlobalBounds().width > player.getGlobalLeft()
-		&& sprite.getPosition().y + sprite.getGlobalBounds().height / 2 < player.getGlobalBottom()
-		&& sprite.getPosition().y + sprite.getGlobalBounds().height / 2 > player.getGlobalTop() );
+	float circle_right = sprite.getPosition().x + sprite.getGlobalBounds().width;
+	float circle_bottom = sprite.getPosition().y + sprite.getGlobalBounds().height;
+
+	return ( circle_right > player.getGlobalLeft()
+		&& circle_bottom < player.getGlobalBottom()
+		&& circle_bottom > player.getGlobalTop() );
 }
 bool Ball::intersectionSide1(Jugador &player)
 {
+	float circle_bottom = sprite.getPosition().y + sprite.getGlobalBounds().height;
+
 	return  (sprite.getPosition().x < player.getGlobalRight()
-		&& sprite.getPosition().y+ sprite.getGlobalBounds().height/2 < player.getGlobalBottom()
-		&& sprite.getPosition().y +sprite.getGlobalBounds().height/2 > player.getGlobalTop()  );
+		&& circle_bottom < player.getGlobalBottom()
+		&& circle_bottom > player.getGlobalTop()  );
 }
 bool Ball::intersectionExtreme1(Jugador &player)
 {
-	return true;
+	float circle_bottom = sprite.getPosition().y + sprite.getGlobalBounds().height;
+
+		return ((sprite.getPosition().x < player.getGlobalRight() && 
+			sprite.getPosition().y < player.getGlobalTop() &&
+			circle_bottom > player.getGlobalTop() ) 
+			||
+			(sprite.getPosition().x < player.getGlobalRight() &&
+				sprite.getPosition().y < player.getGlobalBottom() &&
+				circle_bottom > player.getGlobalBottom()));
 }
 bool Ball::intersectionExtreme2(Jugador &player)
 {
-	return (sprite.getPosition().y + sprite.getGlobalBounds().height > player.getGlobalTop() 
+	float circle_bottom = sprite.getPosition().y + sprite.getGlobalBounds().height;
+	float circle_right = sprite.getPosition().x + sprite.getGlobalBounds().width;
+
+	return ( (circle_bottom > player.getGlobalTop()
 		&& sprite.getPosition().y < player.getGlobalTop()
-		&& sprite.getPosition().x + sprite.getGlobalBounds().width > player.getGlobalLeft() );
+		&& circle_right > player.getGlobalLeft()) 
+		||
+		(circle_bottom > player.getGlobalBottom()
+			&& sprite.getPosition().y < player.getGlobalBottom()
+			&& circle_right > player.getGlobalLeft()) );
 }
