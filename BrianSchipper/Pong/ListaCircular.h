@@ -15,11 +15,11 @@ public:
 	ListElement*pushFront(sf::Sprite &elemval);
 	void Clear();
 	size_t getElementCount();
-	void draw(sf::RenderWindow &window);
+	ListElement*begin() { return first; };
+	void LoadList(sf::Texture &texture, ListaCircular &lista);
 
 private:
 	ListElement *last;
 	ListElement *first;
-	sf::Sprite sprite; 
 };
 
