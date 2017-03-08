@@ -41,7 +41,6 @@ void Ball::objectCollision(sf::Shape* obj)
 	// propper collision with rectangles
 }
 
-// TODO //
 /*
 //Collisions
 
@@ -87,8 +86,6 @@ sf::Vector2f Ball::randomVel()
 		ret = sf::Vector2f(c*startVelocity, s*startVelocity);
 	}
 	return ret;
-	// TODO //
-	// propper random
 }
 
 Ball::Ball(float radius, sf::Vector2f vel, sf::Vector2f pos) 
