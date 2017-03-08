@@ -1,4 +1,5 @@
 #include "ball.hpp"
+#define ERROR -1
 
 Ball::Ball(float size)
     : Super(size)
@@ -13,16 +14,20 @@ Ball::Ball()
     setSpeedY(0);
 }
 
-void Ball::generateCollisions(const RenderWindow &window)
+void Ball::generateCollisions(const RenderWindow& window)
 {
-    this->setSpeedX((this->hasCollidedOnX(window)) ? -this->getSpeedX() : this->getSpeedX());
-    this->setSpeedY((this->hasCollidedOnY(window)) ? -this->getSpeedY() : this->getSpeedY());
+    this->setSpeedX((this->hasCollidedOnX(window)) ? -this->getSpeedX()
+                                                   : this->getSpeedX());
+    this->setSpeedY((this->hasCollidedOnY(window)) ? -this->getSpeedY()
+                                                   : this->getSpeedY());
 }
 
-void Ball::generateCollisions(const RectangleShape &shp)
+void Ball::generateCollisions(const RectangleShape& shp)
 {
-    this->setSpeedX((this->hasCollidedOnX(shp)) ? -this->getSpeedX() : this->getSpeedX());
-    this->setSpeedY((this->hasCollidedOnY(shp)) ? -this->getSpeedY() : this->getSpeedY());
+    this->setSpeedX(
+        (this->hasCollidedOnX(shp)) ? -this->getSpeedX() : this->getSpeedX());
+    this->setSpeedY(
+        (this->hasCollidedOnY(shp)) ? -this->getSpeedY() : this->getSpeedY());
 }
 
 bool Ball::hasCollidedOnX(const RenderWindow& window)
@@ -35,14 +40,17 @@ bool Ball::hasCollidedOnX(const RenderWindow& window)
 
 bool Ball::hasCollidedOnX(const RectangleShape& shp)
 {
+    float bRightSide = getPosition().x + getRadius();
+    float bLeftSide = getPosition().x - getRadius();
+    float shpRightSide = shp.getPosition().x + shp.getSize().x / 2;
+    float shpLeftSide = shp.getPosition().x - shp.getSize().x / 2;
     if (getPosition().x < shp.getPosition().x)
-        return ((getPosition().x + getRadius()
-                    >= shp.getPosition().x - shp.getSize().x / 2)
+        return ((bRightSide >= shpLeftSide) && (bRightSide <= shpLeftSide + 10)
             && this->shareYSpaceWith(shp));
     else if (getPosition().x > shp.getPosition().x)
-        return ((getPosition().x - getRadius()
-                    <= shp.getPosition().x + shp.getSize().x / 2)
+        return ((bLeftSide <= shpRightSide) && (bLeftSide >= shpRightSide - 10)
             && this->shareYSpaceWith(shp));
+    return ERROR;
 }
 
 bool Ball::hasCollidedOnY(const RenderWindow& window)
@@ -55,14 +63,19 @@ bool Ball::hasCollidedOnY(const RenderWindow& window)
 
 bool Ball::hasCollidedOnY(const RectangleShape& shp)
 {
-    if (getPosition().y < shp.getPosition().y)
-        return ((getPosition().y + getRadius()
-                    > shp.getPosition().y - shp.getSize().y)
+    float bUpperSide = getPosition().y + getRadius();
+    float bBottomSide = getPosition().y - getRadius();
+    float shpUpperSide = shp.getPosition().y + shp.getSize().y;
+    float shpBottomSide = shp.getPosition().y - shp.getSize().y;
+    if (getPosition().y <= shp.getPosition().y)
+        return ((bUpperSide >= shpBottomSide)
+            && (bUpperSide <= shpBottomSide + 20)
             && this->shareXSpaceWith(shp));
-    else if (getPosition().y > shp.getPosition().y)
-        return ((getPosition().y - getRadius() 
-                    <= shp.getPosition().y + shp.getSize().y)
+    else if (getPosition().y >= shp.getPosition().y)
+        return ((bBottomSide <= shpUpperSide)
+            && (bBottomSide >= shpUpperSide - 20)
             && this->shareXSpaceWith(shp));
+    return ERROR;
 }
 
 bool Ball::shareXSpaceWith(const RectangleShape& shp)
