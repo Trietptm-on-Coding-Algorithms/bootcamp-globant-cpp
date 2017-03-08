@@ -66,12 +66,9 @@ size_t ListaCircular::getElementCount()
 	return count;
 }
 
-void ListaCircular::draw(sf::RenderWindow &window)
+void ListaCircular::LoadList(sf::Texture &texture,ListaCircular &lista)
 {
-	for (int i = 0; i < getElementCount() ; i++)
-	{
-		cout << "entra a draw de lista circular" << endl;
-		cout << getElementCount() << endl;
-		window.draw(sprite);
-	}
+	sf::Sprite sprite;
+	sprite.setTexture(texture);
+	lista.pushFront(sprite);
 }
