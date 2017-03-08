@@ -1,138 +1,193 @@
 #include "stdafx.h"
-#include "game.h"
+#include "Game.h"
 
-typedef enum STATE{
-	PLAY_TIME, PREP_TIME
-};
 
-game::game(const int maxScore, sf::RenderWindow *rw) {
-	this->maxScore = maxScore;
-	this->rw = rw;
-	int x = rw->getSize().x;
-	int y = rw->getSize().y;
-	player players[playersAmount] = { 
-		player(0,y,sf::Keyboard::W, sf::Keyboard::S), 
-		player(x,y,sf::Keyboard::Up, sf::Keyboard::Down) };
-}
-game::~game() {
+int Game::getScreenX() { return this->w->getSize().x; }
+int Game::getScreenY() { return this->w->getSize().y; }
 
-}
-
-int game::run() {
+int Game::run()
+{
 	sf::Clock clock;
 	sf::Event event;
+	static const int maxMS = 100;
+
+	static const int waitTime = 3000;
+	int waiting;
+
 	bool lostFocus = false;
-	STATE s = PREP_TIME;
-	while (rw->isOpen()) {
+	State s = START;
+	while (w->isOpen())
+	{
 		//Window Management
-		while (rw->pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				rw->close();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			w->close();
+		}
+		while (w->pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				w->close();
+			}
 			else if (event.type == sf::Event::LostFocus) {
-				rw->requestFocus();
+				w->requestFocus();
 				lostFocus = true;
 			}
 			else if (event.type == sf::Event::GainedFocus) {
 				lostFocus = false;
 				clock.restart();
 			}
-
 		}
-
 		//Unfocus "Pause"
-		if (lostFocus)
+		if (lostFocus) {
 			continue;
-
+		}
 		//Time Elapsed
-		int dt = clock.restart().asMilliseconds();
-		if (dt > 100)
-			dt = 100;
+		int ms = clock.restart().asMilliseconds();
+		if (ms > maxMS) {
+			ms = maxMS;
+		}
 
 		switch (s) {
-		case PLAY_TIME:
-			input();
-			update(dt);
-			render();
+		case START: {
+			message = "Press SPACEBAR to begin, or Esc to exit.\n";
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				waiting = waitTime;
+				s = PREP_TIME;
+			}
 			break;
-		case PREP_TIME:
-			break;
-		default:
-			s = PLAY_TIME;
 		}
-		/*
-		//Phisics Updates
-		vx += ax*da*dt;
-		vy += ay*da*dt;
-		vx -= sd*vx*dt;
-		vy -= sd*vy*dt;
-
-		//Collisions
-		if (rectangle.getGlobalBounds().top < 0)
-			rectangle.setPosition(4, 0);
-		if (rectangle.getGlobalBounds().top + rectangle.getGlobalBounds().height > screenY)
-			rectangle.setPosition(4, screenY - rectangle.getGlobalBounds().height);
-
-		if (ball.getGlobalBounds().left < rectangle.getGlobalBounds().left + rectangle.getGlobalBounds().width
-			&& ball.getGlobalBounds().top < rectangle.getGlobalBounds().top + rectangle.getGlobalBounds().height
-			&& ball.getGlobalBounds().top + ball.getGlobalBounds().height > rectangle.getGlobalBounds().top)
-			vx = -vx;
-
-		if (ball.getGlobalBounds().left < 0 && vx < 0)
-			vx = -vx;
-		if (ball.getGlobalBounds().top < 0 && vy < 0)
-			vy = -vy;
-		if (ball.getGlobalBounds().left + ball.getGlobalBounds().width > screenX
-			&& vx > 0)
-			vx = -vx;
-		if (ball.getGlobalBounds().top + ball.getGlobalBounds().height > screenY
-			&& vy > 0)
-			vy = -vy;
-
-		//Object Update
-		ball.move(vx*dv*dt, vy*dv*dt);
-
-		//Renders
-
-		*/
+		case PREP_TIME: {
+			message = "Starting in ";
+			waiting -= ms;
+			float show = waiting / 1000.f;
+			message.append(to_string(show));
+			message.append(".\n");
+			if (waiting <= 0) {
+				s = PLAY_TIME;
+			}
+			break;
+		}
+		case PLAY_TIME: {
+			message = "";
+			message.append(to_string(players.front()->getPoints()));
+			message.append(" : ");
+			message.append(to_string(players.back()->getPoints()));
+			message.append("\n");
+			input();
+			bool ret = update(ms);
+			if (ret) {
+				s = END;
+			}		
+			break;
+		}
+		case END: {
+			for (auto p : players) {
+				if (p->hasWon())
+					message = p->name;
+			}
+			message.append(" has WON.\n");
+			message.append("Press SPACEBAR to begin again, or Esc to exit.\n");
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				for (auto p : players) {
+					p->reset();
+				}
+				for (auto b : balls) {
+					b->reset();
+				}
+				waiting = waitTime;
+				s = PREP_TIME;
+			}
+			break;
+		}
+		default: {
+			s = START;
+		}
+		}
+		render();
 	}
+	return 0;
+}
 
-	// state machine????
-
-	int ret;
-	if (rw->isOpen()) {
-		int winner = 0;
-		for (int i = 0; i < playersAmount; i++) {
-			if (players[i].getScore() >= maxScore) {
-				ret = i;
-				break;
+void Game::input()
+{
+	for (auto p : players) {
+		p->updateInput();
+	}
+}
+bool Game::update(int ms)
+{
+	bool ret = false;
+	for (auto p : players) {
+		p->updatePos(ms);
+		p->collision(0.f, static_cast<float>(getScreenY()) );
+	}
+	for (auto b : balls) {
+		b->updatePos(ms);
+		b->wallCollision(0.f, static_cast<float>(getScreenY()) );
+		int retValue = b->edgeCollision(0.f, static_cast<float>(getScreenX()));
+		if (retValue != 0) {
+			bool gameOver = false;
+			if (retValue < 0) {
+				gameOver = players.back()->incrementPoints();
+			}
+			else if (retValue > 0) {
+				gameOver = players.front()->incrementPoints();
+			}
+			if (gameOver) {
+				ret = true;
+			}
+			else {
+				b->reset();
 			}
 		}
-	} else
-		ret = -1;
+		for (auto p : players) {
+			b-> objectCollision(p->getShape());
+		}
+	}
+	
+	// TODO? //
+	// Collisions between balls
+
 	return ret;
 }
-
-void game::input() {
-	for (int i = 0; i < playersAmount; i++) {
-		player p = players[i];
-		p.movingUp = sf::Keyboard::isKeyPressed( p.getUp() );
-		p.movingDown = sf::Keyboard::isKeyPressed(p.getDown());
+void Game::render()
+{
+	w->clear();
+	for (auto p : players) {
+		w->draw(*p->getShape());
 	}
+	for (auto b : balls) {
+		w->draw(*b->getShape());
+	}
+	renderMessage();
+	w->display();
 }
 
-void game::update(int dt) {
-	if (dt > 0) {
-		for (int i = 0; i < playersAmount; i++)
-			players[i].pUpdate(dt);
-		// TODO: update ball.
-	}
+void Game::renderMessage()
+{
+	printf( (this->message).c_str() );
+	// TODO? //
+	// Proper Graphic Text
 }
 
-void game::render() {
-	rw->clear();
+Game::Game(sf::RenderWindow* w)
+{
+	this->w = w;
+	this->players = vector<Player*>();
+	this->balls = vector<Ball*>();
+	this->message = "";
+	
+	static const float height = 64;
+	static const float width = 16;
+	static const sf::Vector2f size(width, height);
+	players.push_back(new Player("Player 1", size, sf::Vector2f(0, (getScreenY() - height) / 2), sf::Keyboard::W, sf::Keyboard::S));
+	players.push_back(new Player("Player 2", size, sf::Vector2f(getScreenX() - width, (getScreenY() - height) / 2), sf::Keyboard::Up, sf::Keyboard::Down));
 
-	for (int i = 0; i < playersAmount; i++)
-		rw->draw(* (players[i].getTab()) );
-	// TODO: update ball.
-	rw->display();
+	static const float radius = 16.0f;
+	static const sf::Vector2f initVel(0.3f, 0.3f);
+	static const sf::Vector2f initPos( (getScreenX()-2*radius) / 2.f, (getScreenY()-2*radius) / 2.f);
+	balls.push_back( new Ball(radius, initVel, initPos) );
+}
+
+
+Game::~Game()
+{
 }

@@ -1,24 +1,34 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include "player.h"
+#include "SFML\Graphics.hpp"
+#include "Player.h"
+#include "Ball.h"
 
-class game {
+using namespace std;
 
+enum State {
+	START, PLAY_TIME, PREP_TIME, END
+};
+
+class Game
+{
 private:
+	sf::RenderWindow* w;
 
-	static const int playersAmount = 2;
-	static sf::RenderWindow* rw;
-	int maxScore;
-	player players[playersAmount];
+	vector<Player*> players;
+	vector<Ball*> balls;
+	string message;
 
-public:
-	game(const int maxScore, sf::RenderWindow* rw);
-	~game();
+	int getScreenX();
+	int getScreenY();
 
-	int run();
 	void input();
-	void update(int dt);
+	bool update(int ms);
 	void render();
 
+	void renderMessage();
+public:
+	int run();
+	Game(sf::RenderWindow* rw);
+	~Game();
 };
+
