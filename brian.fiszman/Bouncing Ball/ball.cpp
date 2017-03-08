@@ -18,8 +18,6 @@ void Ball::generateCollisions(const RenderWindow& window)
 {
     this->setSpeedX((this->hasCollidedOnX(window)) ? -this->getSpeedX()
                                                    : this->getSpeedX());
-    this->setSpeedY((this->hasCollidedOnY(window)) ? -this->getSpeedY()
-                                                   : this->getSpeedY());
 }
 
 void Ball::generateCollisions(const RectangleShape& shp)

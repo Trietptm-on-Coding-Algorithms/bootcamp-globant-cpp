@@ -1,9 +1,7 @@
 #include "game.hpp"
-Game::Game(RenderWindow& window, Ball& ball, RectangleShape& rectangle,
-    Player p1, Player p2)
+Game::Game(RenderWindow& window, Ball& ball, Player& p1, Player& p2)
     : window(window)
     , ball(ball)
-    , rectangle(rectangle)
     , p1(p1)
     , p2(p2)
 {
@@ -14,17 +12,16 @@ Game::~Game() {}
 void Game::initializeGame()
 {
     window.setFramerateLimit(60);
-    rectangle.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-    rectangle.setOrigin(rectangle.getSize().x / 2, rectangle.getSize().y / 2);
-    rectangle.setOutlineThickness(4);
+    p1.getPaddle().setPosition(window.getSize().x / 2, window.getSize().y / 2);
     ball.setPosition(700, 100);
     ball.setOrigin(ball.getRadius(), ball.getRadius());
     ball.setFillColor(Color::Blue);
+    ball.setSpeedX(50);
+    ball.setSpeedY(50);
 }
 
 void Game::play()
 {
-    CircleShape shp(1.f);
     initializeGame();
     while (window.isOpen()) {
         Event event;
@@ -32,33 +29,31 @@ void Game::play()
             if (event.type == Event::Closed)
                 window.close();
 
-        ball.setSpeedY(ball.getSpeedY() + GRAVITY);
-        ball.setSpeedY(ball.getSpeedY() - (ball.getSpeedY()) * SLOWDOWN);
-        ball.setSpeedX(ball.getSpeedX() - (ball.getSpeedX()) * SLOWDOWN);
-
-        if (Keyboard::isKeyPressed(UP))
-            ball.setSpeedY(ball.getSpeedY() - MOVEMENT_SPEED);
-        if (Keyboard::isKeyPressed(DOWN))
-            ball.setSpeedY(ball.getSpeedY() + MOVEMENT_SPEED);
         if (Keyboard::isKeyPressed(RIGHT))
-            ball.setSpeedX(ball.getSpeedX() + MOVEMENT_SPEED);
+            p1.setSpeedX(p1.getSpeedX() + MOVEMENT_SPEED);
         if (Keyboard::isKeyPressed(LEFT))
-            ball.setSpeedX(ball.getSpeedX() - MOVEMENT_SPEED);
+            p1.setSpeedX(p1.getSpeedX() - MOVEMENT_SPEED);
+        if (Keyboard::isKeyPressed(Keyboard::D))
+            p2.setSpeedX(p2.getSpeedX() + MOVEMENT_SPEED);
+        if (Keyboard::isKeyPressed(Keyboard::A))
+            p2.setSpeedX(p2.getSpeedX() - MOVEMENT_SPEED);
         if (Keyboard::isKeyPressed(QUIT))
             break;
 
-        ball.generateCollisions(window);
-        ball.generateCollisions(rectangle);
 
+        ball.generateCollisions(window);
+        ball.generateCollisions(p1.getPaddle());
+        ball.generateCollisions(p2.getPaddle());
+        p1.generateCollisions(window);
+        p1.move(p1.getSpeedX() * IDLE_SPEED, p1.getSpeedY() * IDLE_SPEED);
+        p2.generateCollisions(window);
+        p2.move(p2.getSpeedX() * IDLE_SPEED, p2.getSpeedY() * IDLE_SPEED);
         ball.move(ball.getSpeedX() * IDLE_SPEED, ball.getSpeedY() * IDLE_SPEED);
 
-        shp.setPosition(ball.getPosition().x, ball.getPosition().y);
         window.clear();
         window.draw(ball);
-        if (ball.getPosition().x + ball.getRadius() >= rectangle.getPosition().x - rectangle.getSize().x / 2 && ball.getPosition().x + ball.getRadius() <= rectangle.getPosition().x - rectangle.getSize().x / 2 + 10 ) {
-            window.draw(shp);
-        }
-        window.draw(rectangle);
+        window.draw(p1.getPaddle());
+        window.draw(p2.getPaddle());
         window.display();
     }
 }

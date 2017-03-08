@@ -6,12 +6,11 @@
 
 int main()
 {
-    Player p1(1);
-    Player p2(2);
     RenderWindow window(VideoMode(800, 600), GAME_NAME);
+    Player p1(1, window);
+    Player p2(2, window);
     Ball ball(10.f);
-    RectangleShape rectangle(Vector2f(120, 5));
-    Game game(window, ball, rectangle, p1, p2);
+    Game game(window, ball, p1, p2);
     game.play();
     return 0;
 }
